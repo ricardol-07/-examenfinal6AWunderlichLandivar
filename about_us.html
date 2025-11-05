@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Media Hub</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .container {
+      display: flex;
+      height: 100%;
+      width: 100%;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #ffffff;
+      margin-bottom: 50px;
+      text-align: center;
+    }
+
+    .nav-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .nav-item {
+      padding: 15px 20px;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(5px);
+    }
+
+    .nav-item.active {
+      background: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-icon {
+      font-size: 20px;
+    }
+
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      background: #f8f9fa;
+    }
+
+    .section {
+      display: none;
+      padding: 60px 80px;
+      min-height: 100%;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-header {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 48px;
+      font-weight: bold;
+      color: #2d3748;
+      margin-bottom: 15px;
+    }
+
+    .section-description {
+      font-size: 20px;
+      color: #718096;
+      line-height: 1.6;
+    }
+
+    .content-card {
+      background: #ffffff;
+      border-radius: 15px;
+      padding: 40px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .feature-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 30px;
+      border-radius: 15px;
+      color: #ffffff;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .feature-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .feature-title {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .feature-text {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .blog-post {
+      background: #ffffff;
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
+    }
+
+    .blog-post:hover {
+      transform: translateX(10px);
+    }
+
+    .blog-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 15px;
+    }
+
+    .blog-excerpt {
+      font-size: 16px;
+      color: #4a5568;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .blog-date {
+      font-size: 14px;
+      color: #a0aec0;
+    }
+
+    .contact-form {
+      max-width: 600px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 16px;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .form-textarea {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 16px;
+      min-height: 150px;
+      resize: vertical;
+      font-family: inherit;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #ffffff;
+      padding: 15px 40px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .success-message {
+      display: none;
+      background: #48bb78;
+      color: #ffffff;
+      padding: 15px 25px;
+      border-radius: 10px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 80px;
+        padding: 20px 10px;
+      }
+
+      .logo {
+        font-size: 18px;
+        margin-bottom: 30px;
+      }
+
+      .nav-item {
+        padding: 15px 10px;
+        justify-content: center;
+      }
+
+      .nav-text {
+        display: none;
+      }
+
+      .section {
+        padding: 40px 30px;
+      }
+
+      .section-title {
+        font-size: 36px;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <nav class="sidebar">
+    <div class="logo" id="site-title">
+     Social Hub
+    </div>
+    <div class="nav-menu"><a class="nav-item active" data-section="home"> <span class="nav-icon">🏠</span> <span class="nav-text">Home</span> </a> <a class="nav-item" data-section="about"> <span class="nav-icon">ℹ️</span> <span class="nav-text">About Us</span> </a> <a class="nav-item" data-section="contact"> <span class="nav-icon">📧</span> <span class="nav-text">Contact</span> </a> <a class="nav-item" data-section="blog"> <span class="nav-icon">📝</span> <span class="nav-text">Blog</span> </a>
+    </div>
+   </nav>
+   <main class="main-content"><!-- HOME SECTION - Save this as index.html or home.html -->
+    
+    </section><!-- ABOUT SECTION - Save this as about_us.html --> <!-- Replace the home section above with this content for about_us.html:
+      <section id="about" class="section active">
+        <div class="section-header">
+          <h1 class="section-title" id="about-heading">About Our Platform</h1>
+          <p class="section-description" id="about-description">Building the future of digital communication</p>
+        </div>
+        
+        <div class="content-card">
+          <h2 style="font-size: 32px; color: #2d3748; margin-bottom: 20px;">Our Mission</h2>
+          <p style="font-size: 18px; color: #4a5568; line-height: 1.8; margin-bottom: 25px;">
+            We believe in creating meaningful connections that transcend geographical boundaries. Our platform is designed to bring people together, foster creativity, and enable authentic conversations in a safe and inclusive environment.
+          </p>
+          <p style="font-size: 18px; color: #4a5568; line-height: 1.8;">
+            Since our founding, we've been committed to innovation, user privacy, and building tools that empower individuals and communities to share their stories and connect with others who share their passions.
+          </p>
+        </div>
+
+        <div class="content-card">
+          <h2 style="font-size: 32px; color: #2d3748; margin-bottom: 20px;">Our Values</h2>
+          <ul style="font-size: 18px; color: #4a5568; line-height: 2; padding-left: 25px;">
+            <li>Authenticity and genuine connections</li>
+            <li>User privacy and data protection</li>
+            <li>Inclusive and diverse communities</li>
+            <li>Innovation in social technology</li>
+            <li>Responsible platform governance</li>
+          </ul>
+        </div>
+      </section>
+   </main>
+  </div>
+  <script>
+    const defaultConfig = {
+      site_title: "Social Hub",
+      home_heading: "Welcome to Social Media",
+      home_description: "Connecting people and ideas across the digital landscape",
+      about_heading: "About Our Platform",
+      about_description: "Building the future of digital communication",
+      contact_heading: "Get In Touch",
+      contact_description: "We'd love to hear from you",
+      blog_heading: "Latest Updates",
+      blog_post_1_title: "The Future of Social Connectivity",
+      blog_post_2_title: "Building Safe Online Communities",
+      background_color: "#f8f9fa",
+      primary_color: "#667eea",
+      text_color: "#2d3748",
+      card_background: "#ffffff",
+      secondary_text: "#718096"
+    };
+
+    let config = { ...defaultConfig };
+
+    async function onConfigChange(newConfig) {
+      config = { ...config, ...newConfig };
+
+      document.getElementById('site-title').textContent = config.site_title;
+      document.getElementById('home-heading').textContent = config.home_heading;
+      document.getElementById('home-description').textContent = config.home_description;
+      document.getElementById('about-heading').textContent = config.about_heading;
+      document.getElementById('about-description').textContent = config.about_description;
+      document.getElementById('contact-heading').textContent = config.contact_heading;
+      document.getElementById('contact-description').textContent = config.contact_description;
+      document.getElementById('blog-heading').textContent = config.blog_heading;
+      document.getElementById('blog-post-1-title').textContent = config.blog_post_1_title;
+      document.getElementById('blog-post-2-title').textContent = config.blog_post_2_title;
+
+      document.querySelector('.main-content').style.background = config.background_color;
+      document.querySelectorAll('.section-title').forEach(el => el.style.color = config.text_color);
+      document.querySelectorAll('.content-card').forEach(el => el.style.background = config.card_background);
+      document.querySelectorAll('.blog-post').forEach(el => el.style.background = config.card_background);
+      document.querySelectorAll('.section-description').forEach(el => el.style.color = config.secondary_text);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                config.primary_color = value;
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.card_background || defaultConfig.card_background,
+              set: (value) => {
+                config.card_background = value;
+                window.elementSdk.setConfig({ card_background: value });
+              }
+            },
+            {
+              get: () => config.secondary_text || defaultConfig.secondary_text,
+              set: (value) => {
+                config.secondary_text = value;
+                window.elementSdk.setConfig({ secondary_text: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["site_title", config.site_title || defaultConfig.site_title],
+          ["home_heading", config.home_heading || defaultConfig.home_heading],
+          ["home_description", config.home_description || defaultConfig.home_description],
+          ["about_heading", config.about_heading || defaultConfig.about_heading],
+          ["about_description", config.about_description || defaultConfig.about_description],
+          ["contact_heading", config.contact_heading || defaultConfig.contact_heading],
+          ["contact_description", config.contact_description || defaultConfig.contact_description],
+          ["blog_heading", config.blog_heading || defaultConfig.blog_heading],
+          ["blog_post_1_title", config.blog_post_1_title || defaultConfig.blog_post_1_title],
+          ["blog_post_2_title", config.blog_post_2_title || defaultConfig.blog_post_2_title]
+        ])
+      });
+    }
+
+    const navItems = document.querySelectorAll('.nav-item');
+    const sections = document.querySelectorAll('.section');
+
+    // Set active navigation based on current page
+    function setActiveNav() {
+      const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+      const pageMap = {
+        'index.html': 'home',
+        'home.html': 'home',
+        'about_us.html': 'about',
+        'contact_us.html': 'contact',
+        'blog.html': 'blog'
+      };
+      
+      const activeSection = pageMap[currentPage] || 'home';
+      
+      navItems.forEach(nav => {
+        nav.classList.remove('active');
+        if (nav.getAttribute('data-section') === activeSection) {
+          nav.classList.add('active');
+        }
+      });
+    }
+
+    // Navigation click handlers for file-based navigation
+    navItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        const targetSection = item.getAttribute('data-section');
+        const fileMap = {
+          'home': 'index.html',
+          'about': 'about_us.html',
+          'contact': 'contact_us.html',
+          'blog': 'blog.html'
+        };
+        
+        const targetFile = fileMap[targetSection];
+        if (targetFile) {
+          window.location.href = targetFile;
+        }
+      });
+    });
+
+    // Set active navigation on page load
+    setActiveNav();
+
+    document.getElementById('contact-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const successMessage = document.getElementById('success-message');
+      successMessage.style.display = 'block';
+      
+      document.getElementById('contact-form').reset();
+      
+      setTimeout(() => {
+        successMessage.style.display = 'none';
+      }, 5000);
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'999c8f7294726f26',t:'MTc2MjM0NzkwMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
